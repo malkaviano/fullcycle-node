@@ -7,14 +7,22 @@ services:
     container_name: node-app
     networks:
       - nodenet
-    volumes:
-      - ./node:/usr/scr/app
     entrypoint: dockerize -wait tcp://db:3306 -timeout 240s node index.js
     tty: true
-    ports:
-      - "3000:3000"
     depends_on:
       - db
+      - nginx
+
+  nginx:
+    container_name: nginx-node-app
+    restart: always
+    tty: true
+    build:
+        context: nginx
+    networks:
+      - nodenet
+    ports:
+        - "80:80"
 
   db:
     image: mysql:5.7
