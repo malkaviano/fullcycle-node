@@ -2,7 +2,7 @@
 
 Desafio docker node
 
-MySQL demora aproximadamente 2 min para subir, dockerize configurado. Pegue um café.
+MySQL demora para subir, dockerize configurado. Pegue um café.
 
 Comando para testar local:
 

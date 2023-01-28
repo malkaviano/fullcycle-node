@@ -19,18 +19,14 @@ const config = {
 
 const mysql = require('mysql');
 
-const connection = mysql.createConnection(config);
-
-const select = `SELECT id, name from people;`;
-
-['Rafael', 'Diego', 'Vicente', 'Paulo', 'Rubens'].forEach((name) => {
-  const insert = `INSERT INTO people(name) values('${name}');`;
-
-  connection.query(insert);
-});
+boot();
 
 app.get('/', (req, res) => {
   let result = '<h1>Full Cycle Rocks!</h1>';
+
+  const connection = mysql.createConnection(config);
+
+  const select = `SELECT id, name from people;`;
 
   connection.query(select, (error, results) => {
     if (!error) {
@@ -39,12 +35,28 @@ app.get('/', (req, res) => {
       }
     }
 
+    connection.end();
+
     res.send(result);
   });
 });
 
-app
-  .listen(port, () => {
-    console.log(`Rodando na porta: ${port}`);
-  })
-  .on('close', () => connection.end());
+app.listen(port, () => {
+  console.log(`Rodando na porta: ${port}`);
+});
+
+function boot() {
+  const connection = mysql.createConnection(config);
+
+  const create = `CREATE TABLE IF NOT EXISTS people(id int not null auto_increment, name varchar(255) not null, Primary key(id));`;
+
+  connection.query(create);
+
+  ['Rafael', 'Diego', 'Vicente', 'Paulo', 'Rubens'].forEach((name) => {
+    const insert = `INSERT INTO people(name) values('${name}');`;
+
+    connection.query(insert);
+  });
+
+  connection.end();
+}
