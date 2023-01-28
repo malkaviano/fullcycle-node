@@ -11,3 +11,5 @@ sudo docker-compose up -d --build
 Logs:
 
 sudo docker logs node-app
+
+A pasta mysql ajuda com problemas de permissão no linux.
